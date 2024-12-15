@@ -49,6 +49,7 @@ model User {
   updatedAt   DateTime          @updatedAt @map("updated_at")
   requests    AdoptionRequest[]
   adoptions   PetAdoption[]
+  favorites   Favorite[]
 
   @@map("users")
 }
@@ -71,6 +72,7 @@ model Pet {
   isAvailable Boolean           @default(true) @map("is_available")
   requests    AdoptionRequest[]
   adoption    PetAdoption?
+  favorites   Favorite[]
 
   @@map("pets")
 }
@@ -97,4 +99,15 @@ model PetAdoption {
   adoptedAt  DateTime @default(now()) @map("adopted_at")
 
   @@map("pet_adoptions")
+}
+
+model Favorite {
+  favoriteId Int      @id @default(autoincrement()) @map("favorite_id")
+  petId      Int      @map("pet_id")
+  pet        Pet      @relation(fields: [petId], references: [petId])
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [userId])
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("favorites")
 }
