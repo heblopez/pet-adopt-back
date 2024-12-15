@@ -1,24 +1,44 @@
-import { requireAuth } from '@clerk/clerk-sdk-node';
+import { verifyToken } from '@clerk/clerk-sdk-node';
 import type { NextFunction, Request, Response } from 'express';
 
-interface AuthRequest extends Request {
-  auth: {
+export interface AuthRequest extends Request {
+  auth?: {
     userId: string;
     sessionId: string;
   };
 }
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
-    requireAuth((handlerReq, _handlerRes) => {
-      req.auth = handlerReq.auth;
-      next();
-    })(req, res);
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      res.status(401).json({ error: 'Unauthorized: No token provided' });
+      return;
+    }
+
+    const token = authHeader.split(' ')[1];
+    const options = {
+      authorizedParties: []
+    };
+    const session = await verifyToken(token, options);
+
+    if (!session) {
+      res.status(401).json({ error: 'Unauthorized: Invalid token' });
+    }
+
+    req.auth = {
+      userId: session.sub,
+      sessionId: session.sid
+    };
+
+    next();
   } catch (error) {
-    res.status(401).json({ error: 'Unauthorized' });
+    console.error('Error in authMiddleware:', error);
+    res.status(401).json({ error: 'Unauthorized: Token verification failed' });
   }
 };
