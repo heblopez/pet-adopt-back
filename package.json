@@ -1,0 +1,49 @@
+{
+  "name": "pet-adopt-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "tsc && node dist/index.js",
+    "format": "biome format --write ./src",
+    "lint": "biome lint --write ./src",
+    "check": "biome check --write ./src",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "prisma-format": "prisma-case-format --file ./prisma/schema.prisma --config-file ./prisma/.prisma-case-format",
+    "prisma-migrate": "prisma migrate dev",
+    "prisma-migrate:format": "prisma-case-format --file ./prisma/schema.prisma --config-file ./prisma/.prisma-case-format && prisma migrate dev"
+  },
+  "keywords": [],
+  "author": "Heberth Lopez<heberth.lopez.19@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.10.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "prisma": "^6.0.1",
+    "prisma-case-format": "^2.2.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "lint-staged": {
+    "*": [
+      "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+    ]
+  }
+}
