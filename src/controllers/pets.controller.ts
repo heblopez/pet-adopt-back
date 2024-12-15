@@ -20,6 +20,10 @@ export const listAvailablePets = async (_req: Request, res: Response) => {
 
 export const registerPet = async (req: AuthRequest, res: Response) => {
   try {
+    if (!req.auth) {
+      throw new Error('Auth not found');
+    }
+
     const { userId } = req.auth;
 
     if (!userId) {

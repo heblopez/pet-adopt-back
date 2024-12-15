@@ -23,10 +23,11 @@ export const authMiddleware = async (
 
     const token = authHeader.split(' ')[1];
     const options = {
-      authorizedParties: ['app_2poA4QgXZluxW5G1lcec0Cu9lnG']
+      authorizedParties: ['app_2poA4QgXZluxW5G1lcec0Cu9lnG'],
+      jwtKey: process.env.CLERK_JWT_KEY
     };
     const session = await verifyToken(token, options);
-
+    console.log('session', session);
     if (!session) {
       res.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
