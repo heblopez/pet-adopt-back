@@ -29,35 +29,72 @@ enum Gender {
   @@map("gender")
 }
 
+enum RequestStatus {
+  Pending
+  Approved
+  Rejected
+
+  @@map("request_status")
+}
+
 model User {
-  userId      String   @id @default(cuid()) @map("user_id")
-  email       String   @unique
-  firstName   String   @map("first_name")
-  lastName    String?  @map("last_name")
-  avatarUrl   String?  @map("avatar_url")
-  phoneNumber String?  @map("phone_number")
+  userId      String            @id @default(cuid()) @map("user_id")
+  email       String            @unique
+  firstName   String            @map("first_name")
+  lastName    String?           @map("last_name")
+  avatarUrl   String?           @map("avatar_url")
+  phoneNumber String?           @map("phone_number")
   pets        Pet[]
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  requests    AdoptionRequest[]
+  adoptions   PetAdoption[]
 
   @@map("users")
 }
 
 model Pet {
-  petId     Int      @id @default(autoincrement()) @map("pet_id")
-  name      String
-  category  Category
-  imageUrl  String   @map("image_url")
-  breed     String
-  age       Decimal  @db.Decimal(4, 2)
-  location  String
-  gender    Gender
-  weight    Decimal  @db.Decimal(5, 2)
-  about     String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  ownerId   String   @map("owner_id")
-  user      User     @relation(fields: [ownerId], references: [userId])
+  petId       Int               @id @default(autoincrement()) @map("pet_id")
+  name        String
+  category    Category
+  imageUrl    String            @map("image_url")
+  breed       String
+  age         Decimal           @db.Decimal(4, 2)
+  location    String
+  gender      Gender
+  weight      Decimal           @db.Decimal(5, 2)
+  about       String
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  ownerId     String            @map("owner_id")
+  owner       User              @relation(fields: [ownerId], references: [userId])
+  isAvailable Boolean           @default(true) @map("is_available")
+  requests    AdoptionRequest[]
+  adoption    PetAdoption?
 
   @@map("pets")
+}
+
+model AdoptionRequest {
+  requestId Int           @id @default(autoincrement()) @map("request_id")
+  userId    String        @map("user_id")
+  user      User          @relation(fields: [userId], references: [userId])
+  petId     Int           @map("pet_id")
+  pet       Pet           @relation(fields: [petId], references: [petId])
+  status    RequestStatus @default(Pending)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@map("adoption_requests")
+}
+
+model PetAdoption {
+  adoptionId Int      @id @default(autoincrement()) @map("adoption_id")
+  petId      Int      @unique @map("pet_id")
+  pet        Pet      @relation(fields: [petId], references: [petId])
+  adopterId  String   @map("adopter_id")
+  adopter    User     @relation(fields: [adopterId], references: [userId])
+  adoptedAt  DateTime @default(now()) @map("adopted_at")
+
+  @@map("pet_adoptions")
 }
