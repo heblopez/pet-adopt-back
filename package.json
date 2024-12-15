@@ -20,6 +20,7 @@
   "author": "Heberth Lopez<heberth.lopez.19@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.1.2",
     "@prisma/client": "^6.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
