@@ -12,3 +12,52 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Category {
+  Dogs
+  Cats
+  Hamsters
+  Fish
+
+  @@map("category")
+}
+
+enum Gender {
+  Male
+  Female
+
+  @@map("gender")
+}
+
+model User {
+  userId      String   @id @default(cuid()) @map("user_id")
+  email       String   @unique
+  firstName   String   @map("first_name")
+  lastName    String?  @map("last_name")
+  avatarUrl   String?  @map("avatar_url")
+  phoneNumber String?  @map("phone_number")
+  pets        Pet[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Pet {
+  petId     Int      @id @default(autoincrement()) @map("pet_id")
+  name      String
+  category  Category
+  imageUrl  String   @map("image_url")
+  breed     String
+  age       Decimal  @db.Decimal(4, 2)
+  location  String
+  gender    Gender
+  weight    Decimal  @db.Decimal(5, 2)
+  about     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  ownerId   String   @map("owner_id")
+  user      User     @relation(fields: [ownerId], references: [userId])
+
+  @@map("pets")
+}
