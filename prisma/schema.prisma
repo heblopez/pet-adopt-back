@@ -109,5 +109,6 @@ model Favorite {
   user       User     @relation(fields: [userId], references: [userId])
   createdAt  DateTime @default(now()) @map("created_at")
 
+  @@unique([petId, userId])
   @@map("favorites")
 }
