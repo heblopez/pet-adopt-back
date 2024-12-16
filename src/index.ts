@@ -3,6 +3,7 @@ import express, { type Request, type Response } from 'express';
 import morgan from 'morgan';
 import { HOSTNAME, PORT } from './config';
 import authRouter from './routes/auth.routes';
+import favoritesRouter from './routes/favorites.routes';
 import petsRouter from './routes/pets.routes';
 
 const app = express();
@@ -24,6 +25,7 @@ const welcomeListener = (_req: Request, res: Response) => {
 app.get('/', welcomeListener);
 app.use('/api', authRouter);
 app.use('/api', petsRouter);
+app.use('/api', favoritesRouter);
 
 app.listen(PORT, () => {
   console.log(`Pet Adopt API is running on http://${HOSTNAME}:${PORT}`);

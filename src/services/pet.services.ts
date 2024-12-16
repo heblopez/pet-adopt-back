@@ -13,8 +13,8 @@ export const getAvailablePets = async (): Promise<Pet[]> => {
           select: {
             firstName: true,
             lastName: true,
-            avatarUrl: true,
-            email: true
+            email: true,
+            avatarUrl: true
           }
         }
       }
