@@ -27,7 +27,6 @@ export const authMiddleware = async (
       jwtKey: process.env.CLERK_JWT_KEY
     };
     const session = await verifyToken(token, options);
-    console.log('session', session);
     if (!session) {
       res.status(401).json({ error: 'Unauthorized: Invalid token' });
     }
