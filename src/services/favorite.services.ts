@@ -7,7 +7,14 @@ export const createFavorite = async (
 ): Promise<Favorite> => {
   try {
     const newFavorite = await prisma.favorite.create({
-      data: favorite
+      data: favorite,
+      include: {
+        pet: {
+          include: {
+            owner: true
+          }
+        }
+      }
     });
 
     return newFavorite;
@@ -17,14 +24,19 @@ export const createFavorite = async (
   }
 };
 
-export const deleteFavorite = async (favoriteId: number): Promise<Favorite> => {
+export const deleteFavorite = async (
+  petId: number,
+  userId: string
+): Promise<Favorite> => {
   try {
     const favorite = await prisma.favorite.delete({
       where: {
-        favoriteId
+        petId_userId: {
+          petId,
+          userId
+        }
       }
     });
-
     return favorite;
   } catch (error) {
     console.error(error);
@@ -41,7 +53,11 @@ export const getFavoritesByUser = async (
         userId
       },
       include: {
-        pet: true
+        pet: {
+          include: {
+            owner: true
+          }
+        }
       }
     });
 

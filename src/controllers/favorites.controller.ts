@@ -54,7 +54,7 @@ export const removeFavorite = async (req: AuthRequest, res: Response) => {
       return;
     }
 
-    const favorite = await deleteFavorite(Number(petId));
+    const favorite = await deleteFavorite(Number(petId), userId);
 
     res.status(200).json({
       message: 'Favorite removed successfully!',
