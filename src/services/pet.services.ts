@@ -39,3 +39,28 @@ export const createNewPet = async (pet: Pet): Promise<Pet> => {
     throw new Error('Error creating new pet');
   }
 };
+
+export const getMyPets = async (userId: string): Promise<Pet[]> => {
+  try {
+    const pets = await prisma.pet.findMany({
+      where: {
+        ownerId: userId
+      },
+      include: {
+        owner: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatarUrl: true
+          }
+        }
+      }
+    });
+
+    return pets;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching my pets');
+  }
+};
