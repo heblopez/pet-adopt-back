@@ -7,6 +7,16 @@ export const getAvailablePets = async (): Promise<Pet[]> => {
     const pets = await prisma.pet.findMany({
       where: {
         isAvailable: true
+      },
+      include: {
+        owner: {
+          select: {
+            firstName: true,
+            lastName: true,
+            avatarUrl: true,
+            email: true
+          }
+        }
       }
     });
 
