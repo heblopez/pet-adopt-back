@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "dev": "tsx watch src/index.ts",
     "start": "tsc && node dist/index.js",
     "format": "biome format --write ./src",
@@ -14,7 +14,8 @@
     "prepare": "husky",
     "prisma-format": "prisma-case-format --file ./prisma/schema.prisma --config-file ./prisma/.prisma-case-format",
     "prisma-migrate": "prisma migrate dev",
-    "prisma-migrate:format": "prisma-case-format --file ./prisma/schema.prisma --config-file ./prisma/.prisma-case-format && prisma migrate dev"
+    "prisma-migrate:format": "prisma-case-format --file ./prisma/schema.prisma --config-file ./prisma/.prisma-case-format && prisma migrate dev",
+    "vercel-build": "npm run build"
   },
   "keywords": [],
   "author": "Heberth Lopez<heberth.lopez.19@gmail.com>",
@@ -35,6 +36,7 @@
     "@types/express": "^5.0.0",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.10.2",
+    "@vercel/node": "^5.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.11",
     "prisma": "^6.0.1",
